@@ -1,0 +1,147 @@
+{%extends "layout.html"%} 
+{%block content%} 
+
+<div class="container">
+  <!-- navbar -->
+  <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#info">Home</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#members">Members</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" href="{{url_for("classwork", className=classroom.get_name())}}">Classwork</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#grade">Grade</a>
+    </li>
+  </ul>
+  <!-- end of navbar -->
+
+  <div class="tab-content">
+    <!-- class info -->
+    <div class="tab-pane fade show active" id="info">
+      <div class="card">
+        <h2 class="card-header">{{ classroom.get_name() }}</h2>
+        <div class="card-body">
+          <h5 class="card-title">Description</h5>
+          <p class="card-text">{{ classroom.get_description() }}</p>
+          {% if classroom.is_private() %}
+          <h5 class="card-title">Class Code</h5>
+          <p class="card-text">{{ classroom.get_code() }}</p>
+          {% endif %}
+        </div>
+      </div>
+      <!-- Announcement -->
+      <div>
+        <div class="card text-center">
+          {% if classroom.is_creator( user.get_email() )%}
+            <div class="card-body">
+              <h5 class="card-title">Announcement</h5>
+              <a href="#annouce-form" class="btn btn-primary" data-bs-toggle="collapse">Create New</a>
+            </div>
+          {% endif %}
+          <!-- form for making new annoucement -->
+          <div class="collapse" id="annouce-form">
+            <div class="card card-body">
+              <form action="" method="post">
+                  <fieldset class="form-group">
+                    <div class="form-group">
+                        {{form.Title.label(class="form-control-label")}}
+                        {% if form.Title.errors %}
+                        {{form.Title(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {%for error in form.Title.errors%}
+                            <span>{{error}}</span>
+                            {%endfor%}
+                        </div>
+                        {%else%}
+                        {{form.Title(class="form-control form-control-lg ")}}                        
+                        {%endif%}
+                    </div>    
+                    <div class="form-group">
+                        {{form.Content.label(class="form-control-label")}}
+                        {% if form.Content.errors %}
+                        {{form.Content(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {%for error in form.Content.errors%}
+                            <span>{{error}}</span>
+                            {%endfor%}
+                        </div>
+                        {%else%}
+                        {{form.Content(class="form-control form-control-lg")}}                        
+                        {%endif%}                    
+                    </div>
+                </fieldset>
+                <div class ="form-group pt-3">
+                    {{form.Submit(class='btn btn-primary')}}
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- end here for form -->
+        </div>
+        {% for announcement in announcements %}
+        <div class="card">
+          <h4 class="card-header">Announcement: {{ announcement.get_title() }}</h4>
+          <div class="card-body">
+            <p class="card-text">{{ announcement.get_content() }}</p>
+          </div>
+        </div>
+        {% endfor %}
+        <!-- end for loop -->
+      </div>
+      <!-- end of Announcement -->
+    </div>
+    <!-- end of class info -->
+
+    <!-- class members -->
+    <div class="card tab-pane" id="members">
+      <h2 class="card-header">Professor</h2>
+      <div class="card-body">
+        <h5 class="card-title">{{ creator }}</h5>
+      </div>
+      
+      {% if s_list |length > 0 %}
+        <h2 class="card-header">Student</h2>
+        {% for student in s_list %}
+          <div class="card-body">
+              <h5 class="card-title">{{ student }}</h5>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <!-- end of class members -->
+
+    <!-- grade panel -->
+
+    <div class="card tab-pane" id="grade">
+      <h2 class="card-header">Professor</h2>
+      <div class="card-body">
+        <h5 class="card-title">{{ creator }}</h5>
+      </div>
+      {% if classroom.is_creator( user.get_email() )%}
+        {% if studentsObj |length > 0 %}
+          <h2 class="card-header">Student</h2>
+          {% for student in studentsObj %}
+          <div class="card-body row">
+              <h5 class="card-title col-10">{{ student.get_name_string() }}</h5>
+              <h5 class="card-title col">Grade: {{ classroom.get_student_grade(student.get_email() )}}</h5>
+          </div>
+          {% endfor %}
+        {% endif %}
+      {% else %}
+        <h2 class="card-header">Student</h2>
+        <div class="card-body row">
+          <h5 class="card-title col-10">{{ user.get_name_string() }}</h5>
+          <h5 class="card-title col">Grade: {{ classroom.get_student_grade(user.get_email() )}}</h5>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- end of grade pannel -->
+
+  </div>
+</div>
+{%endblock%}

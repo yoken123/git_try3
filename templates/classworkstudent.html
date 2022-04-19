@@ -1,0 +1,53 @@
+{%extends "layout.html"%} 
+{%block content%} 
+<div class="container">
+  <!-- nav bar -->
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" href="{{url_for("classwork", className=className)}}">BACK</a>
+    </li>
+  </ul>
+  <!-- end of nav -->
+
+  <!-- classwork info -->
+  <div class="row">
+    <div class="card col-7">
+      <div class="card-body">
+        <h5 class="card-title">{{ classWork.get_title() }}</h5>
+        <h5 class="card-title">Description:</h5>
+        <p class="card-text">{{ classWork.get_description() }}</p>
+        <h5>Instruction File:</h5>
+        <a class="card-text" href="{{url_for("download_file", classwork_name=classWork.get_id(), file_name=classWork.get_instruction_file(), file_type="instruction")}}">{{ classWork.get_instruction_file() }}</a>
+      </div>
+    </div>
+    <!-- end of info -->
+    <!-- grade info -->
+    <div class="card col-4">
+      <div class="card-body">
+        <h5 class="card-title">Your Work</h5>
+        <div class="card">
+          <div class="card-body text-center">
+            {% if not file %}
+              <form action="{{url_for("classwork_student", className=className, name=classWork.get_id())}}" method="post" enctype="multipart/form-data">
+                <label class="input-group-text" for="inputfile">Upload File</label>
+                <input type="file" class="fileInput" id="inputfile" style="display: none;" name="pdf">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            {% else %}
+              <form action="{{url_for("classwork_student", className=className, name=classWork.get_id())}}" method="post" enctype="multipart/form-data">
+                <label class="input-group-text" for="inputfile">{{ file }}</label>
+                <input type="file" class="fileInput" id="inputfile" style="display: none;" name="pdf">
+                <button type="submit" class="btn btn-primary mt-1">Change</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+        <h5 class="card-title">Grade</h5>
+        <p class="card-text">{{ grade }} / 100</p>
+      </div>
+    </div>
+    <!-- end of grade info -->
+  </div>
+
+</div>
+{%endblock%}

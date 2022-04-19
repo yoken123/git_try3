@@ -1,0 +1,165 @@
+{%extends "layout.html"%} 
+{%block content%} 
+
+
+<!-- Button trigger modal for create classroom -->
+  {% if user %}
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+      Create Classroom
+    </button>
+  {% endif %}
+  <!-- Modal create classroom -->
+  <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel1">Create Classroom</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action ="">
+                {{form.hidden_tag()}}
+                <!-- csrf token -->
+                <fieldset class="form-group">
+                    <div class="form-group">
+                        {{form.ClassName.label(class="form-control-label")}}
+
+                        {% if form.ClassName.errors %}
+                        {{form.ClassName(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {%for error in form.ClassName.errors%}
+                            <span>{{error}}</span>
+                            {%endfor%}
+                        </div>
+                        {%else%}
+                        {{form.ClassName(class="form-control form-control-lg ")}}                        
+                        {%endif%}
+
+                        
+                    </div>
+                    <div class="form-group">
+                        {{form.ClassDiscriptio.label(class="form-control-label")}}
+                        {% if form.ClassDiscriptio.errors %}
+                        {{form.ClassDiscriptio(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {%for error in form.ClassDiscriptio.errors%}
+                            <span>{{error}}</span>
+                            {%endfor%}
+                        </div>
+                        {%else%}
+                        {{form.ClassDiscriptio(class="form-control form-control-lg ")}}                        
+                        {%endif%}
+
+                    </div>
+                    <div class="form-group">
+                        {{form.Type.label(class="form-control-label")}}
+                        {% if form.Type.errors %}
+                        {{form.Type(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {%for error in form.Type.errors%}
+                            <span>{{error}}</span>
+                            {%endfor%}
+                        </div>
+                        {%else%}
+                        {{form.Type(class="form-control form-control-lg ")}}                        
+                        {%endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.NumberOfStudents.label(class="form-control-label")}}
+                        {% if form.NumberOfStudents.errors %}
+                        {{form.NumberOfStudents(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {%for error in form.NumberOfStudents.errors%}
+                            <span>{{error}}</span>
+                            {%endfor%}
+                        </div>
+                        {%else%}
+                        {{form.NumberOfStudents(class="form-control form-control-lg ")}}                        
+                        {%endif%}
+                    </div>
+                </fieldset>
+                <div class ="form-group pt-3">
+                    {{form.submit(class='btn btn-outline-info')}}
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Button trigger modal for join classroom -->
+  {% if user %}
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Join Classroom
+    </button>
+  {% endif %}
+  
+  <!-- Modal join classroom -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Join Classroom</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            
+            <form method="POST" action ="">
+                <fieldset class="form-group">
+                    <div class="form-group">
+                        {{form.JClassName.label(class="form-control-label")}}
+
+                        {% if form.JClassName.errors %}
+                        {{form.JClassName(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {%for error in form.JClassName.errors%}
+                            <span>{{error}}</span>
+                            {%endfor%}
+                        </div>
+                        {%else%}
+                        {{form.JClassName(class="form-control form-control-lg ")}}                        
+                        {%endif%}
+
+                        
+                    </div>
+                    
+                    <div class="form-group">
+                        {{form.Jpassword.label(class="form-control-label")}}
+                        {% if form.Jpassword.errors %}
+                        {{form.Jpassword(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {%for error in form.Jpassword.errors%}
+                            <span>{{error}}</span>
+                            {%endfor%}
+                        </div>
+                        {%else%}
+                        {{form.Jpassword(class="form-control form-control-lg ")}}                        
+                        {%endif%}                    
+                    </div>
+                </fieldset>
+                <div class ="form-group pt-3">
+                    {{form.Jsubmit(class='btn btn-outline-info')}}
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row row-cols-auto">
+      {% for class in classes %}
+      <div class="card col" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{ class }}</h5>
+          <a href="{{url_for("classroom", className=class)}}" class="btn btn-primary">Enter</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{%endblock%}

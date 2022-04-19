@@ -1,0 +1,75 @@
+{%extends "layout.html"%} 
+{%block content%} 
+<div class="container">
+  <!-- nav bar -->
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" href="{{url_for("classroom", className=classroom)}}">Back to Classroom!</a>
+    </li>
+  </ul>
+  <!-- end of nav -->
+
+  <!-- create new assignment -->
+  <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+      <h5>Assignments</h5>
+      {% if classObj.is_creator(user.get_email()) %}
+        <button type="button" class="btn btn-primary" data-bs-target="#create-assignment" data-bs-toggle="modal">Create New</button>
+      {% endif %}
+    </div>
+  </nav>
+  <!-- end of it -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="create-assignment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Assignment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <!-- modal content -->
+        <div class="card text-center">
+          <div class="card-body">
+            <!-- start of form -->
+            <form action="{{url_for("classwork", className=classroom)}}" method="post" class="row" enctype="multipart/form-data">
+              <div class="col-8">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" placeholder="Title" name="title">
+                  <label for="floatingInput">Title</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <textarea class="form-control" aria-label="With textarea" placeholder="Description" name="description"></textarea>
+                  <label for="floatingInput">Description</label>
+                </div>
+                <div class="input-group mb-3">
+                  <label class="input-group-text" for="inputfile">Upload File</label>
+                  <input type="file" class="fileInput" id="inputfile" style="display: none;" name="pdf">
+                </div>
+              </div>
+              <div class="col-4 mt-4">
+                <h2>Score: 100</h2>
+                <button type="submit" class="btn btn-primary">Create</button>
+              </div>
+            </form>
+            <!-- end of form -->
+          </div>
+        </div>
+        <!-- end of modal content -->
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <!-- end of modal -->
+  {% for classwork in classworks %}
+  <div class="card">
+    <div class="card-body">
+      <a href="{{url_for("classwork_info",  className=classroom, name=classwork.get_id())}}" class="nav-link">{{ classwork.get_title() }}</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{%endblock%}

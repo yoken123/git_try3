@@ -1,0 +1,23 @@
+{%extends "layout.html"%} 
+{%block content%} 
+
+<div class="container">
+  <div class="media">
+    <img class="rounded-circle account-img" src="/static/images/default.jpg">
+    <div class="media-body">
+        <!-- add current user's name below -->
+      <h3 >First Name: {{ user.get_name()[0] }}</h3>
+      <h3 >Last Name: {{ user.get_name()[1] }}</h3>
+      <h3 >User Email: {{ user.get_email() }}</h3>
+      <!-- add current user's email below -->
+      <p class="text-secondary"></p>
+    </div>
+  </div>
+
+
+  <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='{{ url_for( 'delete') }}';">Delete Account</button>
+
+</div>
+
+
+{%endblock%}

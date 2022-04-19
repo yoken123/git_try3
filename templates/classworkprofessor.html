@@ -1,0 +1,57 @@
+{%extends "layout.html"%} 
+{%block content%} 
+<div class="container">
+  
+  <!-- nav bar -->
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" href="{{url_for("classwork", className=className)}}">BACK</a>
+    </li>
+  </ul>
+  <!-- end of nav -->
+
+  <!-- info -->
+  <div class="row">
+    <div class="card col-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ classWork.get_title() }}</h5>
+        <h5 class="card-title">Description:</h5>
+        <p class="card-text">{{ classWork.get_description() }}</p>
+        <h5>Instruction File:</h5>
+        <a class="card-text" href="{{url_for("download_file", classwork_name=classWork.get_id(), file_name=classWork.get_instruction_file(), file_type="instruction")}}">{{ classWork.get_instruction_file() }}</a>
+      </div>
+    </div>
+
+    <!-- student work -->
+    <div class="card col-8">
+      {% for student in studentInfo %}
+        <div class="row">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Student Name: {{ studentInfo[student].name }}</h5>
+              <p class="card-text">Submission File: 
+                <a class="card-text" href="{{url_for("download_file", 
+                  classwork_name=classWork.get_id(), 
+                  file_name=studentInfo[student].file, 
+                  file_type="student", 
+                  student_email=student)}}">{{ studentInfo[student].file }}</a></p>
+              <p class="card-text" style="display: inline;">
+                Grade:
+                <form action="{{url_for("grading", classname=className , classwork=classWork.get_id(), student=student)}}" method="post" style="display: inline;">
+                  <input type="text" name="score" class="text-end score-input" style="border: none; width: 30px;" value="{{studentInfo[student].grade}}">
+                  <input type="submit" style="position: absolute; left: -9999px"/>
+                </form>
+                /100
+              </p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- end of student work -->
+
+  </div>
+  <!-- end of info -->
+
+</div>
+{%endblock%}
